@@ -1,0 +1,9 @@
+.slate-editor {
+  p, h1, h2, h3, h4, pre, blockquote {
+    line-height: 1.5;
+
+    &:not(:last-child) {
+      margin-bottom: 1em;
+    }
+  }
+}

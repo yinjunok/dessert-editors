@@ -1,0 +1,17 @@
+{
+  "name": "rich-editor",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "apps:dev": "pnpm run --filter \"./apps/**\" -r --stream dev",
+    "packages:dev": "pnpm run --filter \"./packages/**\" -r --parallel --stream dev:build"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "nx": "15.7.2",
+    "@nrwl/nx-cloud": "latest"
+  }
+}

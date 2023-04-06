@@ -1,0 +1,11 @@
+.placeholder {
+  // position: relative;
+
+  &::before {
+    position: absolute;
+    left: .5em;
+    opacity: .6;
+    pointer-events: none;
+    content: attr(placeholder);
+  }
+}
