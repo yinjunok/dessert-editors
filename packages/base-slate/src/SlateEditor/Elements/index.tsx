@@ -6,6 +6,7 @@ import Quotes from './Quotes'
 import Divider from './Divider'
 import ListItem from './ListItem'
 import NumberedList from './NumberedList'
+import BulletedList from './BulletedList'
 
 const renderElement = (props: RenderElementProps) => {
   switch (props.element.type) {
@@ -22,6 +23,8 @@ const renderElement = (props: RenderElementProps) => {
       return <Divider {...props} />
     case 'numbered-list':
       return <NumberedList {...props} />
+    case 'bulleted-list':
+      return <BulletedList {...props} />
     case 'list-item':
       return <ListItem {...props} />
     default:
