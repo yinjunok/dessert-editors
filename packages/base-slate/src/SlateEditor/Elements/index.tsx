@@ -1,22 +1,31 @@
 import { RenderElementProps } from 'slate-react'
-import DefaultElement from './DefaultElement'
-import CodeElement from './CodeElement'
-import HeadingElement from './HeadingElement'
-import QuotesElement from './QuotesElement'
-import DividerElement from './DividerElement'
+import Default from './Default'
+import Code from './Code'
+import Heading from './Heading'
+import Quotes from './Quotes'
+import Divider from './Divider'
+import ListItem from './ListItem'
+import NumberedList from './NumberedList'
 
 const renderElement = (props: RenderElementProps) => {
   switch (props.element.type) {
     case 'code':
-      return <CodeElement {...props} />
-    case 'heading':
-      return <HeadingElement element={props.element} attributes={props.attributes} children={props.children} />
+      return <Code {...props} />
+    case 'h1':
+    case 'h2':
+    case 'h3':
+    case 'h4':
+      return <Heading element={props.element} attributes={props.attributes} children={props.children} />
     case 'quotes':
-      return <QuotesElement {...props} />
+      return <Quotes {...props} />
     case 'divider':
-      return <DividerElement {...props} />
+      return <Divider {...props} />
+    case 'numbered-list':
+      return <NumberedList {...props} />
+    case 'list-item':
+      return <ListItem {...props} />
     default:
-      return <DefaultElement {...props} />
+      return <Default {...props} />
   }
 }
 

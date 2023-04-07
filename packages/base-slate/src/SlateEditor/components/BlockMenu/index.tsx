@@ -3,6 +3,10 @@ import { BaseRange, Editor, Range, Transforms } from 'slate'
 import { finalize, filter, switchMap, takeWhile, repeat, tap, map, takeUntil, merge, fromEvent } from 'rxjs'
 import { useSlate, ReactEditor } from 'slate-react'
 import { matchSorter } from 'match-sorter'
+import { TbH1, TbH2, TbH3, TbH4, TbQuote, TbCode, TbListNumbers, TbList } from 'react-icons/tb'
+import { BiParagraph } from 'react-icons/bi'
+import { RxDividerHorizontal } from 'react-icons/rx'
+import clsx from 'clsx'
 import MenuItem, { MenuItemType } from './MenuItem'
 import useForceUpdate from '../../hooks/useForceUpdate'
 import keyDownSubject from '../../Subject/keyDownSubject'
@@ -37,50 +41,43 @@ const BlockMenu: FC = () => {
   const menus: MenuItemType[] = useMemo(() => (
     [
       {
+        icon: <TbH1 />,
         label: '标题1',
-        type: 'heading',
-        shortcut: 'heading1',
-        props: {
-          level: 1
-        },
+        type: 'h1',
+        shortcut: 'h1',
         command(start, end) {
-          command({ type: 'heading', level: 1, }, start, end)
+          command({ type: 'h1' }, start, end)
         },
       },
       {
+        icon: <TbH2 />,
         label: '标题2',
-        type: 'heading',
-        shortcut: 'heading2',
-        props: {
-          level: 2
-        },
+        type: 'h2',
+        shortcut: 'h2',
         command(start, end) {
-          command({ type: 'heading', level: 2, }, start, end)
+          command({ type: 'h2' }, start, end)
         },
       },
       {
+        icon: <TbH3 />,
         label: '标题3',
-        type: 'heading',
-        shortcut: 'heading3',
-        props: {
-          level: 3
-        },
+        type: 'h3',
+        shortcut: 'h3',
         command(start, end) {
-          command({ type: 'heading', level: 3, }, start, end)
+          command({ type: 'h3' }, start, end)
         },
       },
       {
+        icon: <TbH4 />,
         label: '标题4',
-        type: 'heading',
-        shortcut: 'heading4',
-        props: {
-          level: 4
-        },
+        type: 'h4',
+        shortcut: 'h4',
         command(start, end) {
-          command({ type: 'heading', level: 4, }, start, end)
+          command({ type: 'h4' }, start, end)
         },
       },
       {
+        icon: <BiParagraph />,
         label: '段落',
         type: 'paragraph',
         shortcut: 'paragraph',
@@ -89,6 +86,7 @@ const BlockMenu: FC = () => {
         },
       },
       {
+        icon: <TbQuote />,
         label: '引用',
         type: 'quotes',
         shortcut: 'quotes',
@@ -97,6 +95,7 @@ const BlockMenu: FC = () => {
         },
       },
       {
+        icon: <TbCode />,
         label: '代码',
         type: 'code',
         shortcut: 'code',
@@ -105,11 +104,61 @@ const BlockMenu: FC = () => {
         },
       },
       {
+        icon: <TbListNumbers />,
+        label: '有序列表',
+        type: 'numbered-list',
+        shortcut: 'numberedlist',
+        command(start, end) {
+          if (start && end) {
+            Transforms.delete(editor, {
+              at: {
+                anchor: start.anchor,
+                focus: end.focus,
+              }
+            })
+            Transforms.setSelection(editor, start)
+          }
+          Transforms.setNodes(editor, { type: 'list-item' })
+          Transforms.wrapNodes(editor, { type: 'numbered-list', children: [] })
+        }
+      },
+      {
+        icon: <TbList />,
+        label: '无序列表',
+        type: 'bulleted-list',
+        shortcut: 'bulletedlist',
+        command(start, end) {
+          if (start && end) {
+            Transforms.delete(editor, {
+              at: {
+                anchor: start.anchor,
+                focus: end.focus,
+              }
+            })
+            Transforms.setSelection(editor, start)
+          }
+          Transforms.setNodes(editor, { type: 'list-item' })
+          Transforms.wrapNodes(editor, { type: 'bulleted-list', children: [] })
+        }
+      },
+      {
+        icon: <RxDividerHorizontal />,
         label: '分割线',
         type: 'divider',
         shortcut: 'divider',
         command(start, end) {
-          command({ type: 'divider' }, start, end)
+          Transforms.insertNodes(editor, [
+            { type: 'divider', children: [{ text: '' }] },
+            { type: 'paragraph', children: [{ text: '' }] }
+          ])
+          if (start && end) {
+            Transforms.delete(editor, {
+              at: {
+                anchor: start.anchor,
+                focus: end.focus,
+              }
+            })
+          }
         },
       }
     ]
@@ -227,13 +276,26 @@ const BlockMenu: FC = () => {
     <div
       ref={menuRef}
       style={{ display: 'none' }}
-      className='absolute z-10 rounded shadow-md bg-white max-h-80 overflow-auto'
+      className='scrollbar absolute z-10 rounded shadow-md bg-white max-h-72 overflow-auto'
     >
+      {
+        filterMenus.current.length === 0 && (
+          <div
+            className={
+              clsx(
+                'flex gap-x-2 items-center py-2 px-4 text-sm w-40',
+              )
+            }
+          >
+            无结果
+          </div>
+        )
+      }
       {
         filterMenus.current.map((m, i) => (
           <MenuItem
             menu={m}
-            key={m.label}
+            key={m.shortcut}
             isSelected={menuIndexRef.current === i}
           />
         ))

@@ -4,7 +4,7 @@ import { RenderElementProps, useSelected } from 'slate-react'
 import clsx from 'clsx'
 import './style.scss'
 
-const DefaultElement: FC<RenderElementProps> = ({ element, children, attributes }) => {
+const Default: FC<RenderElementProps> = ({ element, children, attributes }) => {
   const selected = useSelected()
   const text = useMemo(() => Node.string(element), [element])
 
@@ -19,4 +19,4 @@ const DefaultElement: FC<RenderElementProps> = ({ element, children, attributes 
   )
 }
 
-export default DefaultElement
+export default Default

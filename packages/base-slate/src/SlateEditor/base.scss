@@ -1,5 +1,36 @@
+.scrollbar {
+  &::-webkit-scrollbar-track {
+    background: #EDECE9;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: #D3D1CB;
+  }
+
+  &::-webkit-scrollbar-thumb:hover {
+    background: #AEACA6;
+  }
+
+  &::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+
+  &::-webkit-scrollbar {
+    background: transparent;
+  }
+}
+
 .slate-editor {
-  p, h1, h2, h3, h4, pre, blockquote {
+  p,
+  h1,
+  h2,
+  h3,
+  h4,
+  pre,
+  ol,
+  ul,
+  blockquote {
     line-height: 1.5;
 
     &:not(:last-child) {

@@ -8,10 +8,10 @@ export const widthDivider = (editor: Editor) => {
   return editor
 } 
 
-const DividerElement: FC<RenderElementProps> = (props) => (
+const Divider: FC<RenderElementProps> = (props) => (
   <div {...props.attributes} className='my-4 h-0.5 bg-slate-200' contentEditable={false}>
     {props.children}
   </div>
 )
 
-export default DividerElement
+export default Divider

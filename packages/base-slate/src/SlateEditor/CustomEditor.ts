@@ -1,5 +1,5 @@
 import { Editor, Element as SlateElement } from 'slate'
-import { TextFormatType, ElementType, CustomElement } from './types'
+import { TextFormatType, ElementType } from './types'
 
 const CustomEditor = {
   toggleMark(editor: Editor, format: TextFormatType) {
@@ -22,15 +22,7 @@ const CustomEditor = {
 
     const nodes = Editor.nodes(editor, {
       at: Editor.unhangRange(editor, selection),
-      match: n => {
-        const typeMatched = !Editor.isEditor(n) && SlateElement.isElement(n) && n.type === format
-        
-        let propsMatched = true
-        if (props) {
-          propsMatched = Object.keys(props).every(p => props[p] === (n as CustomElement)[p])
-        }
-        return typeMatched && propsMatched
-      }
+      match: n => !Editor.isEditor(n) && SlateElement.isElement(n) && n.type === format
     })
 
     const [match] = Array.from(nodes)

@@ -26,8 +26,7 @@ export type ParagraphElement = {
 } & BaseElement
 
 export type HeadingElement = {
-  type: 'heading'
-  level: 1 | 2 | 3 | 4
+  type: 'h1' | 'h2' | 'h3' | 'h4'
 } & BaseElement
 
 export type CodeElement = {
@@ -42,7 +41,21 @@ export type DividerElement = {
   type: 'divider'
 } & BaseElement
 
-export type CustomElement = ParagraphElement | HeadingElement | CodeElement | QuotesElement | DividerElement
+export type ListItemElement = {
+  type: 'list-item'
+} & BaseElement
+
+export type NumberedListElement = {
+  type: 'numbered-list',
+  children: ListItemElement[]
+}
+
+export type BulletedListElement = {
+  type: 'bulleted-list',
+  children: ListItemElement[]
+}
+
+export type CustomElement = BulletedListElement | ParagraphElement | HeadingElement | CodeElement | QuotesElement | DividerElement | ListItemElement | NumberedListElement
 
 export type ElementType = CustomElement['type']
 

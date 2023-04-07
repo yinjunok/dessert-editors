@@ -1,18 +1,17 @@
-import { useState, FC, useMemo } from 'react'
-import { createEditor, Descendant } from 'slate'
+import { useState, FC } from 'react'
+import { createEditor, Descendant, Transforms, Editor, Element, Node } from 'slate'
 import { Slate, Editable, withReact } from 'slate-react'
 import { withHistory } from 'slate-history'
 import isHotkey from 'is-hotkey'
 import renderElement from './Elements'
 import renderLeaf from './Leaf/Leaf'
-import { CustomElement, TextFormatType } from './types'
-import { deserialize, serialize } from './utils'
+import { TextFormatType } from './types'
 import CustomEditor from './CustomEditor'
 import BlockMenu from './components/BlockMenu'
 import HoverToolbar from './components/HoverToolbar'
 import keyDownSubject from './Subject/keyDownSubject'
 import keyUpSubject from './Subject/keyUpSubject'
-import { widthDivider } from './Elements/DividerElement'
+import { widthDivider } from './Elements/Divider'
 import Ctx from './context'
 import './tailwind.css'
 import './base.scss'
@@ -28,30 +27,25 @@ const HOTKEYS: {[P: string]: TextFormatType} = {
   'mod+`': 'code',
 }
 
+const initialValue: Descendant[] = [
+  {
+    type: 'paragraph',
+    children: [{ text: '一行文本' }],
+  },
+]
+
+/**
+ * 如果在空行换行, 切换成段落
+*/
+
 const SlateEditor: FC<SlateEditorProps> = () => {
   const [editor] = useState(() => widthDivider(withHistory(withReact(createEditor()))))
-  const initialValue: Descendant[] = useMemo(() => {
-    const initVal: CustomElement[] = [
-      {
-        type: 'paragraph',
-        children: [{ text: 'A line of text in a paragraph.' }],
-      },
-    ]
-    const content = localStorage.getItem('content')
-    return content ? deserialize(content) as Descendant[] : initVal
-  }, [])
 
   return (
     <Ctx.Provider value={{}}>
       <Slate
         editor={editor}
         value={initialValue}
-        onChange={v => {
-          const isAstChange = editor.operations.some(op => 'set_selection' !== op.type)
-          if (isAstChange) {
-            localStorage.setItem('content', serialize(v))
-          }
-        }}
       >
         <HoverToolbar />
         <BlockMenu />
@@ -65,6 +59,19 @@ const SlateEditor: FC<SlateEditorProps> = () => {
                 e.preventDefault()
                 const mark = HOTKEYS[hotkey]
                 CustomEditor.toggleMark(editor, mark)
+              }
+            }
+            if (e.key === 'Enter' && editor.selection) {
+              const nodeEntry = Editor.above(editor, { mode: 'lowest' })
+              if (nodeEntry) {
+                const node = nodeEntry[0]
+                if (Element.isElement(node) && node.type !== 'paragraph' && Node.string(node) === '') {
+                  e.preventDefault()
+                  if (node.type === 'list-item') {
+                    Transforms.liftNodes(editor)
+                  }
+                  Transforms.setNodes(editor, { type: 'paragraph' })
+                }
               }
             }
             keyDownSubject.next(e.nativeEvent)
