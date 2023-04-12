@@ -1,12 +1,15 @@
-import { FC, useEffect, useRef, useCallback, useMemo } from 'react'
+import { FC, useEffect, useRef, useCallback, useMemo, useContext } from 'react'
 import { BaseRange, Editor, Range, Transforms } from 'slate'
 import { finalize, filter, switchMap, takeWhile, repeat, tap, map, takeUntil, merge, fromEvent } from 'rxjs'
 import { useSlate, ReactEditor } from 'slate-react'
 import { matchSorter } from 'match-sorter'
-import { TbH1, TbH2, TbH3, TbH4, TbQuote, TbCode, TbListNumbers, TbList } from 'react-icons/tb'
+import { TbH1, TbH2, TbH3, TbH4, TbQuote, TbCode, TbListNumbers, TbList, TbPhoto } from 'react-icons/tb'
 import { BiParagraph } from 'react-icons/bi'
 import { RxDividerHorizontal } from 'react-icons/rx'
 import clsx from 'clsx'
+import { createBaseElement } from '../../utils'
+import upload from '../../mock/upload'
+import Ctx from '../../context'
 import MenuItem, { MenuItemType } from './MenuItem'
 import useForceUpdate from '../../hooks/useForceUpdate'
 import keyDownSubject from '../../Subject/keyDownSubject'
@@ -20,6 +23,7 @@ import keyUpSubject from '../../Subject/keyUpSubject'
 */
 const BlockMenu: FC = () => {
   const editor = useSlate()
+  const ctx = useContext(Ctx)
   const menuRef = useRef<HTMLDivElement>(null)
   const forceUpdate = useForceUpdate()
   const menuIndexRef = useRef<number>(0)
@@ -86,6 +90,72 @@ const BlockMenu: FC = () => {
         },
       },
       {
+        icon: <TbPhoto />,
+        label: '图片',
+        type: 'image',
+        shortcut: 'image',
+        command(start, end) {
+          const input = document.createElement('input')
+          input.accept = 'image/*'
+          input.type = 'file'
+          input.style.display = 'none'
+          document.body.appendChild(input)
+          input.click()
+          input.onchange = e => {
+            const target = e.target as HTMLInputElement
+            const file = target.files?.[0]
+            if (file) {
+              const id = Math.random().toString()
+
+              Transforms.insertNodes(editor, [
+                {
+                  ...createBaseElement({ isVoid: true, markableVoid: false, }),
+                  id,
+                  type: 'upload-holder',
+                  children: [{ text: '' }]
+                },
+                {
+                  ...createBaseElement(),
+                  type: 'paragraph',
+                }
+              ])
+              ctx.addUploadItem({
+                id,
+                status: 'doing',
+                progress: 0
+              })
+              upload({
+                file,
+                onProgress(percent) {
+                  ctx.updateUploadItem({
+                    id,
+                    status: 'doing',
+                    progress: percent
+                  })
+                },
+                onSuccess(url) {
+                  ctx.updateUploadItem({
+                    id,
+                    url,
+                    status: 'done',
+                    progress: 100
+                  })
+                }
+              })
+            }
+          }
+          if (start && end) {
+            Transforms.delete(editor, {
+              at: {
+                anchor: start.anchor,
+                focus: end.focus,
+              }
+            })
+          }
+          input.remove()
+        }
+      },
+      {
         icon: <TbQuote />,
         label: '引用',
         type: 'quotes',
@@ -119,7 +189,7 @@ const BlockMenu: FC = () => {
             Transforms.setSelection(editor, start)
           }
           Transforms.setNodes(editor, { type: 'list-item' })
-          Transforms.wrapNodes(editor, { type: 'numbered-list', children: [] })
+          Transforms.wrapNodes(editor, { ...createBaseElement(), type: 'numbered-list', children: [] })
         }
       },
       {
@@ -138,7 +208,7 @@ const BlockMenu: FC = () => {
             Transforms.setSelection(editor, start)
           }
           Transforms.setNodes(editor, { type: 'list-item' })
-          Transforms.wrapNodes(editor, { type: 'bulleted-list', children: [] })
+          Transforms.wrapNodes(editor, { ...createBaseElement(), type: 'bulleted-list', children: [] })
         }
       },
       {
@@ -148,8 +218,8 @@ const BlockMenu: FC = () => {
         shortcut: 'divider',
         command(start, end) {
           Transforms.insertNodes(editor, [
-            { type: 'divider', children: [{ text: '' }] },
-            { type: 'paragraph', children: [{ text: '' }] }
+            { ...createBaseElement({ isVoid: true }), type: 'divider', },
+            { ...createBaseElement(), type: 'paragraph', }
           ])
           if (start && end) {
             Transforms.delete(editor, {

@@ -15,10 +15,12 @@ export type FormattedText = {
 }
 export type TextFormatType = Exclude<keyof FormattedText, 'text'>
 export type CustomText = FormattedText
-export type BaseElement = {
+export type BaseElement<Child = CustomText> = {
   type: string
-  children: CustomText[]
-  [P: string]: any
+  isInline: boolean
+  isVoid: boolean
+  markableVoid: boolean
+  children: Child[]
 }
 
 export type ParagraphElement = {
@@ -47,15 +49,23 @@ export type ListItemElement = {
 
 export type NumberedListElement = {
   type: 'numbered-list',
-  children: ListItemElement[]
-}
+} & BaseElement<ListItemElement>
 
 export type BulletedListElement = {
   type: 'bulleted-list',
-  children: ListItemElement[]
-}
+} & BaseElement<ListItemElement>
 
-export type CustomElement = BulletedListElement | ParagraphElement | HeadingElement | CodeElement | QuotesElement | DividerElement | ListItemElement | NumberedListElement
+export type ImageElement = {
+  type: 'image'
+  url: string
+} & BaseElement
+
+export type UploadHolder = {
+  type: 'upload-holder'
+  id: string
+} & BaseElement
+
+export type CustomElement = UploadHolder | ImageElement | BulletedListElement | ParagraphElement | HeadingElement | CodeElement | QuotesElement | DividerElement | ListItemElement | NumberedListElement
 
 export type ElementType = CustomElement['type']
 

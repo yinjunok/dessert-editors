@@ -1,4 +1,4 @@
-import { useState, FC } from 'react'
+import { useState, FC, useCallback } from 'react'
 import { createEditor, Descendant, Transforms, Editor, Element, Node } from 'slate'
 import { Slate, Editable, withReact } from 'slate-react'
 import { withHistory } from 'slate-history'
@@ -11,8 +11,9 @@ import BlockMenu from './components/BlockMenu'
 import HoverToolbar from './components/HoverToolbar'
 import keyDownSubject from './Subject/keyDownSubject'
 import keyUpSubject from './Subject/keyUpSubject'
-import { widthDivider } from './Elements/Divider'
-import Ctx from './context'
+import Ctx, { UploadItemType } from './context'
+import { createBaseElement } from './utils'
+import withElement from './plugins/withElement'
 import './tailwind.css'
 import './base.scss'
 
@@ -20,7 +21,7 @@ export type SlateEditorProps = {
 
 }
 
-const HOTKEYS: {[P: string]: TextFormatType} = {
+const HOTKEYS: { [P: string]: TextFormatType } = {
   'mod+b': 'bold',
   'mod+i': 'italic',
   'mod+u': 'underline',
@@ -29,20 +30,42 @@ const HOTKEYS: {[P: string]: TextFormatType} = {
 
 const initialValue: Descendant[] = [
   {
-    type: 'paragraph',
-    children: [{ text: '一行文本' }],
+    ...createBaseElement(),
+    type: 'image',
+    url: 'https://source.unsplash.com/zOwZKwZOZq8',
+  },
+  {
+    ...createBaseElement(),
+    type: 'paragraph'
   },
 ]
 
-/**
- * 如果在空行换行, 切换成段落
-*/
-
 const SlateEditor: FC<SlateEditorProps> = () => {
-  const [editor] = useState(() => widthDivider(withHistory(withReact(createEditor()))))
+  const [editor] = useState(() => withElement(withHistory(withReact(createEditor()))))
+  const [uploads, setUploads] = useState<UploadItemType[]>([])
+
+  const removeUploadItem = useCallback((id: string) => {
+    setUploads(state => state.filter(s => s.id !== id))
+  }, [])
+
+  const updateUploadItem = useCallback((newItem: UploadItemType) => {
+    setUploads(state => state.map(item => item.id === newItem.id ? newItem : item))
+  }, [])
+
+  const addUploadItem = useCallback((item: UploadItemType) => {
+    setUploads(state => [...state, item])
+  }, [])
+
+  const getUploadItem = useCallback((id: string) => uploads.find(item => item.id === id), [uploads])
 
   return (
-    <Ctx.Provider value={{}}>
+    <Ctx.Provider value={{
+      uploads,
+      getUploadItem,
+      addUploadItem,
+      removeUploadItem,
+      updateUploadItem,
+    }}>
       <Slate
         editor={editor}
         value={initialValue}

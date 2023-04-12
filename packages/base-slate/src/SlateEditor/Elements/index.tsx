@@ -7,6 +7,8 @@ import Divider from './Divider'
 import ListItem from './ListItem'
 import NumberedList from './NumberedList'
 import BulletedList from './BulletedList'
+import UploadHolder from './UploadHolder'
+import Image from './Image'
 
 const renderElement = (props: RenderElementProps) => {
   switch (props.element.type) {
@@ -27,6 +29,10 @@ const renderElement = (props: RenderElementProps) => {
       return <BulletedList {...props} />
     case 'list-item':
       return <ListItem {...props} />
+    case 'image':
+      return <Image {...props} />
+    case 'upload-holder':
+      return <UploadHolder {...props} />
     default:
       return <Default {...props} />
   }
