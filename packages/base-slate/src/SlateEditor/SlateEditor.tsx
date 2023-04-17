@@ -9,10 +9,10 @@ import { TextFormatType } from './types'
 import CustomEditor from './CustomEditor'
 import BlockMenu from './components/BlockMenu'
 import HoverToolbar from './components/HoverToolbar'
+import LinkToolbar from './components/LinkToolbar'
 import keyDownSubject from './Subject/keyDownSubject'
 import keyUpSubject from './Subject/keyUpSubject'
 import Ctx, { UploadItemType } from './context'
-import { createBaseElement } from './utils'
 import withElement from './plugins/withElement'
 import './tailwind.css'
 import './base.scss'
@@ -30,13 +30,23 @@ const HOTKEYS: { [P: string]: TextFormatType } = {
 
 const initialValue: Descendant[] = [
   {
-    ...createBaseElement(),
-    type: 'image',
-    url: 'https://source.unsplash.com/zOwZKwZOZq8',
-  },
-  {
-    ...createBaseElement(),
-    type: 'paragraph'
+    type: 'paragraph',
+    isInline: false,
+    isVoid: false,
+    markableVoid: false,
+    children: [
+      { text: '挞斗像一艘艘航船，在金色的稻浪上行驶；' },
+      {
+        type: 'link',
+        title: '超链接',
+        isInline: true,
+        isVoid: false,
+        markableVoid: false,
+        url: 'https://www.baidu.com',
+        children: [{ text: '开镰收割金秋的歌声如此深情愉悦，' }]
+      },
+      { text: '粗犷的音韵在稻浪上流泻；' }
+    ]
   },
 ]
 
@@ -72,6 +82,7 @@ const SlateEditor: FC<SlateEditorProps> = () => {
       >
         <HoverToolbar />
         <BlockMenu />
+        <LinkToolbar />
         <Editable
           className='slate-editor'
           renderLeaf={renderLeaf}

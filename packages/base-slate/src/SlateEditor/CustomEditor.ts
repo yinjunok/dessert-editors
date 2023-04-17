@@ -14,7 +14,7 @@ const CustomEditor = {
     const marks = Editor.marks(editor)
     return marks ? marks[format] === true : false
   },
-  isBlockActive(editor: Editor, format: ElementType, props?: { [P: string]: any }) {
+  isBlockActive(editor: Editor, format: ElementType) {
     const { selection } = editor
     if (!selection) {
       return false

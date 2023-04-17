@@ -8,6 +8,7 @@ import ListItem from './ListItem'
 import NumberedList from './NumberedList'
 import BulletedList from './BulletedList'
 import UploadHolder from './UploadHolder'
+import Link from './Link'
 import Image from './Image'
 
 const renderElement = (props: RenderElementProps) => {
@@ -33,6 +34,8 @@ const renderElement = (props: RenderElementProps) => {
       return <Image {...props} />
     case 'upload-holder':
       return <UploadHolder {...props} />
+    case 'link':
+      return <Link {...props} />
     default:
       return <Default {...props} />
   }

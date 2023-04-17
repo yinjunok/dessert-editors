@@ -7,7 +7,6 @@ import { TbH1, TbH2, TbH3, TbH4, TbQuote, TbCode, TbListNumbers, TbList, TbPhoto
 import { BiParagraph } from 'react-icons/bi'
 import { RxDividerHorizontal } from 'react-icons/rx'
 import clsx from 'clsx'
-import { createBaseElement } from '../../utils'
 import upload from '../../mock/upload'
 import Ctx from '../../context'
 import MenuItem, { MenuItemType } from './MenuItem'
@@ -50,7 +49,7 @@ const BlockMenu: FC = () => {
         type: 'h1',
         shortcut: 'h1',
         command(start, end) {
-          command({ type: 'h1' }, start, end)
+          command({ type: 'h1', isInline: false, isVoid: false, markableVoid: false }, start, end)
         },
       },
       {
@@ -59,7 +58,7 @@ const BlockMenu: FC = () => {
         type: 'h2',
         shortcut: 'h2',
         command(start, end) {
-          command({ type: 'h2' }, start, end)
+          command({ type: 'h2', isInline: false, isVoid: false, markableVoid: false }, start, end)
         },
       },
       {
@@ -68,7 +67,7 @@ const BlockMenu: FC = () => {
         type: 'h3',
         shortcut: 'h3',
         command(start, end) {
-          command({ type: 'h3' }, start, end)
+          command({ type: 'h3', isInline: false, isVoid: false, markableVoid: false }, start, end)
         },
       },
       {
@@ -77,7 +76,7 @@ const BlockMenu: FC = () => {
         type: 'h4',
         shortcut: 'h4',
         command(start, end) {
-          command({ type: 'h4' }, start, end)
+          command({ type: 'h4', isInline: false, isVoid: false, markableVoid: false }, start, end)
         },
       },
       {
@@ -86,7 +85,7 @@ const BlockMenu: FC = () => {
         type: 'paragraph',
         shortcut: 'paragraph',
         command(start, end) {
-          command({ type: 'paragraph' }, start, end)
+          command({ type: 'paragraph', isInline: false, isVoid: false, markableVoid: false }, start, end)
         },
       },
       {
@@ -109,14 +108,19 @@ const BlockMenu: FC = () => {
 
               Transforms.insertNodes(editor, [
                 {
-                  ...createBaseElement({ isVoid: true, markableVoid: false, }),
                   id,
+                  isInline: false,
+                  isVoid: true,
+                  markableVoid: false,
                   type: 'upload-holder',
                   children: [{ text: '' }]
                 },
                 {
-                  ...createBaseElement(),
                   type: 'paragraph',
+                  isInline: false,
+                  isVoid: false,
+                  markableVoid: false,
+                  children: [{ text: '' }]
                 }
               ])
               ctx.addUploadItem({
@@ -161,7 +165,7 @@ const BlockMenu: FC = () => {
         type: 'quotes',
         shortcut: 'quotes',
         command(start, end) {
-          command({ type: 'quotes' }, start, end)
+          command({ type: 'quotes', isInline: false, isVoid: false, markableVoid: false }, start, end)
         },
       },
       {
@@ -170,7 +174,7 @@ const BlockMenu: FC = () => {
         type: 'code',
         shortcut: 'code',
         command(start, end) {
-          command({ type: 'code' }, start, end)
+          command({ type: 'code', markableVoid: false, isInline: false, isVoid: false, }, start, end)
         },
       },
       {
@@ -188,8 +192,9 @@ const BlockMenu: FC = () => {
             })
             Transforms.setSelection(editor, start)
           }
-          Transforms.setNodes(editor, { type: 'list-item' })
-          Transforms.wrapNodes(editor, { ...createBaseElement(), type: 'numbered-list', children: [] })
+
+          Transforms.setNodes(editor, { type: 'list-item', isInline: false, isVoid: false, markableVoid: false })
+          Transforms.wrapNodes(editor, { type: 'numbered-list', isInline: false, isVoid: false, markableVoid: false, children: [] })
         }
       },
       {
@@ -207,8 +212,8 @@ const BlockMenu: FC = () => {
             })
             Transforms.setSelection(editor, start)
           }
-          Transforms.setNodes(editor, { type: 'list-item' })
-          Transforms.wrapNodes(editor, { ...createBaseElement(), type: 'bulleted-list', children: [] })
+          Transforms.setNodes(editor, { type: 'list-item', isInline: false, isVoid: false, markableVoid: false })
+          Transforms.wrapNodes(editor, { type: 'bulleted-list', isInline: false, isVoid: false, markableVoid: false, children: [] })
         }
       },
       {
@@ -218,8 +223,20 @@ const BlockMenu: FC = () => {
         shortcut: 'divider',
         command(start, end) {
           Transforms.insertNodes(editor, [
-            { ...createBaseElement({ isVoid: true }), type: 'divider', },
-            { ...createBaseElement(), type: 'paragraph', }
+            {
+              type: 'divider',
+              isInline: false,
+              isVoid: true,
+              markableVoid: false,
+              children: [{ text: '' }]
+            },
+            {
+              type: 'paragraph',
+              isInline: false,
+              isVoid: false,
+              markableVoid: false,
+              children: [{ text: '一个段落' }]
+            }
           ])
           if (start && end) {
             Transforms.delete(editor, {

@@ -15,57 +15,117 @@ export type FormattedText = {
 }
 export type TextFormatType = Exclude<keyof FormattedText, 'text'>
 export type CustomText = FormattedText
-export type BaseElement<Child = CustomText> = {
-  type: string
-  isInline: boolean
-  isVoid: boolean
-  markableVoid: boolean
-  children: Child[]
-}
+export type Children = (CustomText| InlineElement)[]
+
+type Distribute<U> = U extends any ? {type: U} : never;
+type IsInline<T> = T['isInline'] extends true ? T : never
+type InlineElement = LinkElement
 
 export type ParagraphElement = {
   type: 'paragraph'
-} & BaseElement
+  isInline: false
+  isVoid: false
+  markableVoid: false
+  children: Children
+}
 
 export type HeadingElement = {
   type: 'h1' | 'h2' | 'h3' | 'h4'
-} & BaseElement
+  isInline: false
+  isVoid: false
+  markableVoid: false
+  children: Children
+}
 
 export type CodeElement = {
   type: 'code'
-} & BaseElement
+  isInline: false
+  isVoid: false
+  markableVoid: false
+  children: Children
+}
 
 export type QuotesElement = {
   type: 'quotes'
-} & BaseElement
+  isInline: false
+  isVoid: false
+  markableVoid: false
+  children: Children
+}
 
 export type DividerElement = {
   type: 'divider'
-} & BaseElement
+  isInline: false
+  isVoid: true
+  markableVoid: false
+  children: Children
+}
 
 export type ListItemElement = {
   type: 'list-item'
-} & BaseElement
+  isInline: false
+  isVoid: false
+  markableVoid: false
+  children: Children
+}
 
 export type NumberedListElement = {
-  type: 'numbered-list',
-} & BaseElement<ListItemElement>
+  type: 'numbered-list'
+  isInline: false
+  isVoid: false
+  markableVoid: false
+  children: ListItemElement[]
+}
 
 export type BulletedListElement = {
-  type: 'bulleted-list',
-} & BaseElement<ListItemElement>
+  type: 'bulleted-list'
+  isInline: false
+  isVoid: false
+  markableVoid: false
+  children: ListItemElement[]
+}
 
 export type ImageElement = {
   type: 'image'
   url: string
-} & BaseElement
+  alt: string
+  isInline: false
+  isVoid: true
+  markableVoid: false
+  children: Children
+}
+
+export type LinkElement = {
+  type: 'link'
+  url: string
+  title: string
+  isInline: true
+  isVoid: false
+  markableVoid: false
+  children: Children
+}
 
 export type UploadHolder = {
   type: 'upload-holder'
   id: string
-} & BaseElement
+  isInline: false
+  isVoid: true
+  markableVoid: false
+  children: Children
+}
 
-export type CustomElement = UploadHolder | ImageElement | BulletedListElement | ParagraphElement | HeadingElement | CodeElement | QuotesElement | DividerElement | ListItemElement | NumberedListElement
+export type CustomElement = 
+  LinkElement
+| UploadHolder
+| ImageElement
+| BulletedListElement
+| ParagraphElement
+| HeadingElement
+| CodeElement
+| QuotesElement
+| DividerElement
+| ListItemElement
+| NumberedListElement
 
 export type ElementType = CustomElement['type']
 

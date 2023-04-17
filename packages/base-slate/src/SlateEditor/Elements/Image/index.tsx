@@ -24,6 +24,7 @@ const Image: FC<RenderElementProps> = ({ children, attributes, element }) => {
         </button>
         <img
           src={ele.url}
+          alt={ele.alt}
           className='block max-w-full h-auto'
         />
       </div>
