@@ -20,8 +20,6 @@
     "prismjs": "^1.29.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-icons": "^4.8.0",
-    "rxjs": "^7.8.0",
     "sass": "^1.60.0",
     "slate": "^0.91.1",
     "slate-history": "^0.86.0",
