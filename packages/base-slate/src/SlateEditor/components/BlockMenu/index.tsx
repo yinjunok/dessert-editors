@@ -333,7 +333,7 @@ const BlockMenu: FC = () => {
           })
         )
       }),
-      takeWhile(command => command.length <= 7 && command.length > 0),
+      takeWhile(command => command.length <= 10 && command.length > 0),
       takeUntil(merge(commandEnter$, fromEvent(document, 'click'))),
       finalize(() => {
         el.style.display = 'none'

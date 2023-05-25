@@ -1,13 +1,13 @@
 import { NodeSpec } from 'prosemirror-model'
 
 const image: NodeSpec = {
-  inline: true,
+  // inline: true,
   attrs: {
     src: {},
     alt: {},
     title: {}
   },
-  group: 'inline',
+  group: 'block',
   draggable: true,
   parseDOM: [
     {
@@ -30,7 +30,7 @@ const image: NodeSpec = {
   ],
   toDOM: (node) => {
     const { src, alt, title } = node.attrs
-    return ["img", { src, alt, title }]
+    return ['div', { class: 'img-wrapper' }, ["img", { src, alt, title }]]
   }
 }
 

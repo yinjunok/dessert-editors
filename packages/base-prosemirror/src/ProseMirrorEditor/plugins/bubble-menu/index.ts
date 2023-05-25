@@ -12,15 +12,18 @@ import schema from "../../schema"
 
 const bubble = css`
   position: absolute;
-  z-index: 20;
   background-color: white;
   border-radius: 4px;
   z-index: 9;
   border: 1px solid #eee;
   box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2);
-  display: flex;
   padding: 4px;
   gap: 2px;
+  display: none;
+`
+
+const bubbleVisible = css`
+  display: flex;
 `
 
 const buttonCss = css`
@@ -90,8 +93,7 @@ class BubbleMenu {
   
   constructor(private view: EditorView) {
     this.bubble.classList.add(bubble)
-    document.body.appendChild(this.bubble)
-
+    const fragment = document.createDocumentFragment()
     this.items.forEach(item => {
       item.dom.classList.add(buttonCss)
       item.dom.title = item.label
@@ -101,8 +103,10 @@ class BubbleMenu {
         view.focus()
         item.command(view.state, view.dispatch, view)
       })
-      this.bubble.appendChild(item.dom)
+      fragment.appendChild(item.dom)
     })
+    this.bubble.appendChild(fragment)
+    document.body.appendChild(this.bubble)
   }
 
   private updateMenu = () => {
@@ -112,23 +116,23 @@ class BubbleMenu {
     })
   }
 
-  update(view: EditorView, lastState: EditorState): void {
+  update(view: EditorView, prevState: EditorState): void {
     const state = view.state
 
     if (
-      lastState &&
-      lastState.doc.eq(state.doc) &&
-      lastState.selection.eq(state.selection)
+      prevState &&
+      prevState.doc.eq(state.doc) &&
+      prevState.selection.eq(state.selection)
     ) {
       return
     }
     const { $from, $to } = view.state.selection
     if (state.selection.empty || !$from.parent.eq($to.parent)) {
-      this.bubble.style.display = 'none'
+      this.bubble.classList.remove(bubbleVisible)
       return
     }
     this.updateMenu()
-    this.bubble.style.display = ''
+    this.bubble.classList.add(bubbleVisible)
     const { from, to } = state.selection
     const bubbleRect = this.bubble.getBoundingClientRect()
     const start = view.coordsAtPos(from)

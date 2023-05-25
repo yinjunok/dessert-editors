@@ -15,13 +15,20 @@ const EditorStyles: FC = () => {
             margin: 0;
           }
 
-          placeholder {
-            opacity: .65;
-            padding-left: .5em;
+          hr {
+            margin: 1em 0;
+            height: 1px;
+            background-color: #999;
+            border: none;
           }
 
           .ProseMirror {
             outline: none;
+          }
+
+          blockquote {
+            padding: .5em 1em;
+            border-left: 3px solid #eee;
           }
 
           code, kbd, samp, pre {
@@ -43,6 +50,7 @@ const EditorStyles: FC = () => {
 
           img {
             max-width: 100%;
+            height: auto;
           }
 
           notegroup {
@@ -61,6 +69,12 @@ const EditorStyles: FC = () => {
             }
           }
 
+          pre {
+            padding: 1em;
+            background-color: #f5f5f5;
+            border-radius: 4px;
+          }
+
           p,
           h1,
           h2,
@@ -75,6 +89,10 @@ const EditorStyles: FC = () => {
             &:not(:last-child) {
               margin-bottom: 1em;
             }
+          }
+
+          .img-wrapper {
+            text-align: center;
           }
         }
       `}
