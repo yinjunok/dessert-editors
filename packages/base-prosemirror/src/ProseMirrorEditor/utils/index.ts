@@ -28,7 +28,7 @@ export const uploadMock = ({
   onProgress = noop,
 }: UploadMockParams) => {
   onStart()
-  const subscription = interval(1000).pipe(
+  const subscription = interval(500).pipe(
     timeInterval(),
     scan((acc, cur) => acc + cur.interval, 0),
     tap(v => {

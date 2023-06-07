@@ -28,13 +28,23 @@ const ProseMirrorEditor = () => {
           keymap(baseKeymap),
           createUploadHolder(),
           keymap({ "Mod-z": undo, "Mod-y": redo }),
-        ]
+        ],
       })
+      
+      /**
+       * doc
+       *  ul
+       *  li
+      */
 
       viewRef.current = new EditorView(viewDomRef.current, {
         state,
         dispatchTransaction(tr) {
           const newState = viewRef.current!.state.apply(tr)
+          // console.log('doc', newState.doc)
+          const { $from, $to } = newState.selection
+          const range = $from.blockRange($to)
+          console.log(range, $from, $to)
           viewRef.current?.updateState(newState)
         },
       })
@@ -50,15 +60,21 @@ const ProseMirrorEditor = () => {
       <EditorStyles />
       <div ref={viewDomRef} className='prosemirror-editor' />
       <div id='content' style={{ display: 'none' }}>
-        <p>1. 0123456789</p>
-        <p>2. 0123456789</p>
+        <p>1.0123456789</p>
+        <p>2.0123456789</p>
         <hr />
-        <p>3. 0123456789</p>
+        <p>3.0123456789</p>
         <img src='https://cdn.pixabay.com/photo/2023/04/06/01/26/heart-7902540_960_720.jpg' />
-        <p>4. 0123456789</p>
-        {/* <p>
-          <img src='https://cdn.pixabay.com/photo/2023/04/06/01/26/heart-7902540_960_720.jpg' />
-        </p> */}
+        <p>4.0123456789</p>
+        <ul>
+          <p>2234234</p>
+          <li>列表</li>
+          <li>列表</li>
+        </ul>
+        <ol>
+          <li>列表</li>
+          <li>列表</li>
+        </ol>
       </div>
     </>
   )

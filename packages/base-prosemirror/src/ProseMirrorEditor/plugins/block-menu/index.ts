@@ -13,8 +13,10 @@ import separatorIcon from '../../assets/separator.svg?raw'
 import codeIcon from '../../assets/code.svg?raw'
 import quoteIcon from '../../assets/quote.svg?raw'
 import photoIcon from '../../assets/photo.svg?raw'
+import listIcon from '../../assets/list.svg?raw'
+import listNumbersIcon from '../../assets/list-numbers.svg?raw'
 import { uploadMock } from '../../utils'
-import { uploadHolderMetaKey, uploadHolderPluginKey, findUploadHolder } from '../upload-holder'
+import { uploadHolderMetaKey, findUploadHolder } from '../upload-holder'
 
 const containerCss = css`
   position: absolute;
@@ -141,6 +143,32 @@ const createBlockMenu = () => {
       command: setBlockType(schema.nodes.code_block),
     },
     {
+      label: '无序列表',
+      shortcut: 'bullet',
+      icon: listIcon,
+      dom: document.createElement('div'),
+      nodeType: schema.nodes.bulletList,
+      command: (state: EditorState, dispatch?: EditorView['dispatch'], view?: EditorView) => {
+        setBlockType(schema.nodes.listItem)(state, dispatch, view)
+        wrapIn(schema.nodes.bulletList)(state, dispatch, view)
+
+        return true
+      }
+    },
+    {
+      label: '有序列表',
+      shortcut: 'ordered',
+      icon: listNumbersIcon,
+      dom: document.createElement('div'),
+      nodeType: schema.nodes.orderedList,
+      command: (state: EditorState, dispatch?: EditorView['dispatch'], view?: EditorView) => {
+        setBlockType(schema.nodes.listItem)(state, dispatch, view)
+        wrapIn(schema.nodes.orderedList)(state, dispatch, view)
+
+        return true
+      },
+    },
+    {
       label: '图片',
       shortcut: 'image',
       icon: photoIcon,
@@ -159,7 +187,7 @@ const createBlockMenu = () => {
           const file = target.files?.[0]
           const id = Math.random().toString()
           if (file) {
-            uploadMock({
+           const unsubscribe = uploadMock({
               file,
               onStart() {
                 if (view) {
@@ -171,13 +199,13 @@ const createBlockMenu = () => {
               onProgress(percent) {
                 if (view) {
                   view.dispatch(
-                    view.state.tr.setMeta(uploadHolderMetaKey, { id, action: 'update', progress: percent, pos: state.selection.from })
+                    view.state.tr.setMeta(uploadHolderMetaKey, { id, action: 'update', progress: percent, pos: state.selection.from, onRemove: unsubscribe })
                   )
                 }
               },
               onError() {
                 if (view) {
-                  view.state.tr.setMeta(uploadHolderMetaKey, { id, action: 'remove' })
+                  view.state.tr.setMeta(uploadHolderMetaKey, { id, action: 'remove', onRemove: unsubscribe })
                 }
               },
               onSuccess(path) {
