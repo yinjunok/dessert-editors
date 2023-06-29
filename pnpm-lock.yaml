@@ -1,4 +1,4 @@
-lockfileVersion: '6.1'
+lockfileVersion: '6.0'
 
 settings:
   autoInstallPeers: true
@@ -63,12 +63,36 @@ importers:
 
   packages/base-lexical:
     dependencies:
+      '@lexical/code':
+        specifier: ^0.11.1
+        version: 0.11.1(lexical@0.11.1)
+      '@lexical/html':
+        specifier: ^0.11.1
+        version: 0.11.1(lexical@0.11.1)
+      '@lexical/link':
+        specifier: ^0.11.1
+        version: 0.11.1(lexical@0.11.1)
+      '@lexical/list':
+        specifier: ^0.11.1
+        version: 0.11.1(lexical@0.11.1)
       '@lexical/react':
         specifier: ^0.11.1
         version: 0.11.1(lexical@0.11.1)(react-dom@18.2.0)(react@18.2.0)(yjs@13.6.1)
+      '@lexical/rich-text':
+        specifier: ^0.11.1
+        version: 0.11.1(@lexical/clipboard@0.11.1)(@lexical/selection@0.11.1)(@lexical/utils@0.11.1)(lexical@0.11.1)
+      '@lexical/selection':
+        specifier: ^0.11.1
+        version: 0.11.1(lexical@0.11.1)
+      clsx:
+        specifier: ^1.2.1
+        version: 1.2.1
       lexical:
         specifier: ^0.11.1
         version: 0.11.1
+      match-sorter:
+        specifier: ^6.3.1
+        version: 6.3.1
       react:
         specifier: ^18.2.0
         version: 18.2.0

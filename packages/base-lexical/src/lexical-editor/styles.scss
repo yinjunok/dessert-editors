@@ -45,6 +45,7 @@ h1 {
 }
 
 .editor-container {
+  position: relative;
   background: #fff;
   margin: 20px auto 20px auto;
   border-radius: 2px;
@@ -86,6 +87,58 @@ h1 {
 .editor-paragraph {
   margin: 0 0 15px 0;
   position: relative;
+}
+
+.editor-textBold {
+  font-weight: bold;
+}
+
+.editor-textItalic {
+  font-style: italic;
+}
+
+.editor-textStrikethrough {
+  text-decoration: line-through;
+}
+
+.editor-textUnderline {
+  text-decoration: underline;
+}
+
+.editor-image {
+  img {
+    max-width: 100%;
+    height: auto;
+  }
+}
+
+.editor-code {
+  background-color: rgb(240, 242, 245);
+  font-family: Menlo, Consolas, Monaco, monospace;
+  display: block;
+  padding: 12px;
+  // padding: 8px 8px 8px 52px;
+  line-height: 1.53;
+  font-size: 13px;
+  margin: 0;
+  margin-top: 8px;
+  margin-bottom: 8px;
+  overflow-x: auto;
+  position: relative;
+  tab-size: 2;
+  border-radius: 4px;
+}
+
+.editor-quote {
+  margin: 0;
+  margin-left: 20px;
+  margin-bottom: 10px;
+  font-size: 15px;
+  color: rgb(101, 103, 107);
+  border-left-color: rgb(206, 208, 212);
+  border-left-width: 4px;
+  border-left-style: solid;
+  padding-left: 16px;
 }
 
 .tree-view-output {
@@ -154,12 +207,11 @@ pre::-webkit-scrollbar-thumb {
 }
 
 .emoji {
-  color: transparent;
   background-size: 16px 16px;
   background-position: center;
   background-repeat: no-repeat;
   vertical-align: middle;
-  margin: 0 -1px;
+  margin: 0 1px;
 }
 
 .emoji-inner {
@@ -178,4 +230,27 @@ pre::-webkit-scrollbar-thumb {
 
 .emoji.happysmile {
   background-image: url(../assets/emoji/1F642.png);
+}
+
+.scrollbar {
+  &::-webkit-scrollbar-track {
+    background: #EDECE9;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: #D3D1CB;
+  }
+
+  &::-webkit-scrollbar-thumb:hover {
+    background: #AEACA6;
+  }
+
+  &::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+
+  &::-webkit-scrollbar {
+    background: transparent;
+  }
 }

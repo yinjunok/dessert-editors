@@ -24,7 +24,6 @@ export class EmojiNode extends TextNode {
   }
 
   updateDOM(prevNode: TextNode, dom: HTMLElement, config: EditorConfig) {
-    console.log(prevNode)
     const inner = dom.firstChild as HTMLElement;
     if (inner === null) {
       return true;

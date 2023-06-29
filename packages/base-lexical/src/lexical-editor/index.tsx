@@ -1,35 +1,44 @@
 import { LexicalComposer } from "@lexical/react/LexicalComposer";
-import { PlainTextPlugin } from "@lexical/react/LexicalPlainTextPlugin";
 import { ContentEditable } from "@lexical/react/LexicalContentEditable";
 import { HistoryPlugin } from "@lexical/react/LexicalHistoryPlugin";
 import { OnChangePlugin } from "@lexical/react/LexicalOnChangePlugin";
 import LexicalErrorBoundary from "@lexical/react/LexicalErrorBoundary";
-import TreeViewPlugin from "./plugins/TreeViewPlugin";
-import EmoticonPlugin from "./plugins/EmoticonPlugin";
+import { RichTextPlugin } from '@lexical/react/LexicalRichTextPlugin'
+import { ListPlugin } from '@lexical/react/LexicalListPlugin'
+import TreeViewPlugin from "./plugins/TreeViewPlugin";;
 import MyCustomAutoFocusPlugin from "./plugins/MyCustomAutoFocusPlugin";
+import SlashCommandPlaceholderPlugin from './plugins/SlashCommandPlaceholderPlugin'
+import EmotionPlugin from "./plugins/EmotionPlugin";
+import SlashCommandMenu from './plugins/SlashCommandMenu'
+import BubbleMenu from './plugins/BubbleMenu'
+import LinkPlugin from "./plugins/LinkPlugin";
+import LinkEditorPlugin from './plugins/LinkEditorPlugin'
 import editorConfig from "./config";
-import onChange from "./onChange";
-import './styles.css'
+import Test from "./plugins/Test";
+import './styles.scss'
 
 export default function Editor() {
   return (
     <LexicalComposer initialConfig={editorConfig}>
       <div className="editor-container">
-        <PlainTextPlugin
+        <RichTextPlugin
           contentEditable={<ContentEditable className="editor-input" />}
-          placeholder={<Placeholder />}
+          placeholder={null}
           ErrorBoundary={LexicalErrorBoundary}
         />
-        <OnChangePlugin onChange={onChange} />
+        <OnChangePlugin onChange={() => { }} />
         <HistoryPlugin />
         <TreeViewPlugin />
-        <EmoticonPlugin />
+        <EmotionPlugin />
+        <ListPlugin />
         <MyCustomAutoFocusPlugin />
+        <SlashCommandMenu />
+        <SlashCommandPlaceholderPlugin />
+        <Test />
+        <BubbleMenu />
+        <LinkPlugin />
+        <LinkEditorPlugin />
       </div>
     </LexicalComposer>
   );
-}
-
-function Placeholder() {
-  return <div className="editor-placeholder">Enter some plain text...</div>;
 }

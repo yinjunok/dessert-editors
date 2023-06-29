@@ -1,0 +1,119 @@
+.insert-image-modal {
+  z-index: 11;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  background-color: #fff;
+  border-radius: 4px;
+  width: 360px;
+  transform: translate3d(-50%, -50%, 0);
+}
+
+.insert-image-btn {
+  outline: none;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  background-color: rgba(0, 0, 0, .15);
+
+  &:disabled {
+    cursor: not-allowed;
+    background-color: rgba(0, 0, 0, .15) !important;
+  }
+
+  &:hover {
+    background-color: rgba(0, 0, 0, .2);
+  }
+
+  &:active {
+    background-color: rgba(0, 0, 0, .25);
+  }
+}
+
+.insert-image-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid rgba(0, 0, 0, .25);
+}
+
+.insert-image-tab {
+  display: flex;
+
+  > div {
+    padding: 10px 16px;
+    cursor: pointer;
+    font-size: 1.2em;
+    user-select: none;
+    border-bottom: 1px solid transparent;
+    
+    &:hover {
+      background-color: rgba(0, 0, 0, .05);
+    }
+
+    &:active {
+      background-color: rgba(0, 0, 0, .08);
+    }
+
+    &.active {
+      border-color: mediumblue;
+    }
+  }
+}
+
+.insert-image-close {
+  border-radius: 50%;
+  margin-right: 16px;
+  color: rgba(0, 0, 0, .65);
+  cursor: pointer;
+  border: none;
+  outline: none;
+  width: 30px;
+  height: 30px;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+
+  &:hover {
+    background-color: rgba(0, 0, 0, .05);
+  }
+
+  &:active {
+    background-color: rgba(0, 0, 0, .08);
+  }
+} 
+
+.insert-image-body {
+  padding: 16px;
+}
+
+.insert-image-input {
+  outline: none;
+  border-radius: 4px;
+  height: 28px;
+  padding: 4px 8px;
+  font-size: 16px;
+  border: 1px solid rgba(0, 0, 0, .25);
+
+  &[type='file'] {
+    cursor: pointer;
+  }
+}
+
+.insert-image-modal-mask {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, .3);
+  z-index: 10;
+}
+
+.insert-image-form {
+  display: grid;
+  grid-template-columns: 40px 1fr;
+  grid-gap: 12px;
+  align-items: center;
+}

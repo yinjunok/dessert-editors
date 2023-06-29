@@ -1,5 +1,10 @@
 import { InitialConfigType } from '@lexical/react/LexicalComposer'
-import { EmojiNode } from "./nodes/EmojiNode";
+import { ListItemNode, ListNode } from "@lexical/list";
+import { LinkNode } from '@lexical/link'
+import { HeadingNode, QuoteNode } from '@lexical/rich-text'
+import { CodeNode } from '@lexical/code'
+import { EmotionNode } from './nodes/EmotionNode'
+import { ImageNode } from './nodes/ImageNode';
 import theme from "./themes";
 
 const editorConfig: InitialConfigType = {
@@ -8,7 +13,17 @@ const editorConfig: InitialConfigType = {
   onError(error) {
     throw error;
   },
-  nodes: [EmojiNode]
+  
+  nodes: [
+    EmotionNode,
+    ListItemNode,
+    ListNode,
+    LinkNode,
+    HeadingNode,
+    QuoteNode,
+    CodeNode,
+    ImageNode
+  ]
 };
 
 export default editorConfig;
